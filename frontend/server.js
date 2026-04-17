@@ -3,7 +3,10 @@ const http = require("http");
 const path = require("path");
 
 const port = Number(process.env.PORT || 10000);
-const apiBaseUrl = process.env.API_BASE_URL ? `http://${process.env.API_BASE_URL}` : "http://127.0.0.1:10001";
+const rawApiBaseUrl = process.env.API_BASE_URL || "http://127.0.0.1:10001";
+const apiBaseUrl = rawApiBaseUrl.startsWith("http://") || rawApiBaseUrl.startsWith("https://")
+  ? rawApiBaseUrl
+  : `http://${rawApiBaseUrl}`;
 const indexHtml = fs.readFileSync(path.join(__dirname, "public", "index.html"), "utf8");
 
 function sendHtml(response, body) {
@@ -51,4 +54,3 @@ const server = http.createServer(async (request, response) => {
 server.listen(port, () => {
   console.log(`Frontend service listening on ${port}`);
 });
-
