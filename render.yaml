@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: render-multi-service-frontend
+    runtime: node
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: API_BASE_URL
+        fromService:
+          name: render-multi-service-api
+          type: web
+          property: hostport
+
+  - type: web
+    name: render-multi-service-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+
